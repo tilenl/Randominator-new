@@ -1,0 +1,27 @@
+# Data for random names generation
+
+# Templates
+
+[templates]
+
+
+[data]
+pre = ["ah", "sah", "dah"]
+post = ["bla", "fa"]
+  [data.name]
+    [data.name.blabish]
+      [data.name.blabish.first]
+      pre = ["A", "B", "D", "C"]
+      mid = ["ra", "ba", "za"]
+      post = ["hos", "bos", "dos"]
+      [data.name.blabish.last]
+      pre = ["Za", "Ba", "Da", "Ka", "Ze"]
+      post = ["ba", "ha", "da", "re", "ka", "po"]
+    [data.name.english]
+      [data.name.english.first]
+      pre = []
+      mid = []
+      post = []
+      [data.name.english.last]
+      pre = []
+      post = []

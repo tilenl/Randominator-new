@@ -1,0 +1,11 @@
+# Templates for generating random sentences
+
+game_template = "A <!genre> where you <!action> <!object> <!twist>"
+
+test = "<!entity.human> is going to <!action.live_being> you!"
+
+test2 = "<!genre> game where you <?action.live_being>"
+
+name_gen_blabish = "<!name.blabish.first.pre><?name.blabish.first.mid><!name.blabish.first.post> von <!name.blabish.last.pre><!name.blabish.last.post>"
+
+name_gen_english = "<!name.english.first.pre><?name.english.first.mid><!name.english.first.post> from <!name.english.last.pre><!name.english.last.post>"

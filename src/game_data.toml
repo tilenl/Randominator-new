@@ -1,0 +1,75 @@
+# Data for random generations
+
+# Templates
+[templates]
+game_idea_1 = "<!genre> where you <!action> <?adition> <!object>"
+
+[data]
+  [data.genre]
+  action = ["A shooting game", "An action game", "An FPS", "A horror game"]
+  arcade = ["An arcade game", "A short game"]
+
+  [data.object]
+  human = ["Europeans", "Africans", "Americans"]
+  animal = ["wolfs", "fleas", "cats", "dogs"]
+  creature = ["giants", "chewbackas"]
+
+  addition = ["short", "amusing", "funny"]
+
+  # This is retarded, but maybe it will break the code, so I'm leaving it in
+  [data.action]
+  action = [
+    "kill",
+    "shoot",
+    "club",
+    "murder",
+    "stab",
+    "chop up",
+    "wrestle",
+    "kick",
+    "punch",
+    "slap",
+    "destroy",
+    "blow up",
+    "eradicate",
+    "begrudgingly join forces with",
+    "ally with",
+    "team up with",
+    "interrogate",
+    "do science on",
+    "use your powers on",
+    "save",
+    "ride horses with",
+    "drive cars with",
+    "drive tanks with",
+    "drive trucks with",
+    "ride bikes with",
+    "have been contracted to kill",
+    "assassinate",
+    "rob",
+    "bribe",
+    "hunt",
+    "poison",
+    "motivate",
+    "work on the self-esteem of",
+    "feel bad for",
+    "cheer up",
+    "go on a heist with",
+    "pilot spaceships with",
+    "listen to",
+    "hijack",
+    "goof around with",
+    "run after",
+    "smuggle",
+    "defeat",
+    "beat up",
+    "date",
+    "save the world from",
+    "time travel with",
+    "go back in time to kill",
+    "shout at",
+    "point your gun at",
+    "commit war crimes with",
+    "freeze",
+    "burn",
+  ]
