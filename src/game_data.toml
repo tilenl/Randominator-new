@@ -14,6 +14,7 @@ game_idea_1 = "<!genre> where you <!action> <?adition> <!object>"
   animal = ["wolfs", "fleas", "cats", "dogs"]
   creature = ["giants", "chewbackas"]
 
+
   addition = ["short", "amusing", "funny"]
 
   # This is retarded, but maybe it will break the code, so I'm leaving it in
