@@ -23,7 +23,7 @@ fn main() -> std::io::Result<()> {
         .takes_value(true)
         .value_name("INTEGER")
         .default_value("1")
-        .help("Number of generated sentences")
+        .help("Number of generated sentences"),
     )
     .arg(
       clap::Arg::with_name("dataset")
@@ -43,12 +43,11 @@ fn main() -> std::io::Result<()> {
         .number_of_values(1)
         .value_name("STRING")
         .takes_value(true)
-        .help("Name of template (in dataset file) that will be used")
+        .help("Name of template (in dataset file) that will be used"),
     )
     .get_matches();
 
   let file_name = matches.value_of("dataset").unwrap();
-  
   let mut input_file = match File::open(Path::new(file_name)) {
     Ok(file) => file,
     Err(err) => {
@@ -81,7 +80,10 @@ fn main() -> std::io::Result<()> {
   let templates = match file.get("templates") {
     Some(templ) => templ,
     None => {
-      eprintln!("ERROR: No definition of [templates] exists in file {}", file_name);
+      eprintln!(
+        "ERROR: No definition of [templates] exists in file {}",
+        file_name
+      );
       std::process::exit(1);
     }
   };
@@ -89,61 +91,81 @@ fn main() -> std::io::Result<()> {
   let data = match file.get("data") {
     Some(dat) => dat,
     None => {
-      eprintln!("ERROR: No definition of [data] exists in file {}", file_name);
+      eprintln!(
+        "ERROR: No definition of [data] exists in file {}",
+        file_name
+      );
       std::process::exit(1);
     }
   };
 
   // DATA AND TEMPLATES LOADED SUCCESSFULLY
 
+  let mut random_gen = rand::thread_rng();
+
   // we unwrap it, because default value that will be passed is 1 ... we will ALWAYS get a value (maybe not valid number)
   let num_of_sent: &str = matches.value_of("numOfSent").unwrap();
   let num_of_sent: usize = match num_of_sent.parse::<usize>() {
     Ok(num) => {
       if num < 1 {
-        eprintln!("WARNING: number of generated sentences {} is lower than 1... generating 1 sentence", num);
+        eprintln!(
+          "WARNING: number of generated sentences {} is lower than 1... generating 1 sentence",
+          num
+        );
         1
       } else {
         num
       }
-    },
+    }
     Err(e) => {
-      eprintln!("ERROR: number of sentences: \"{}\", in not a valid number\n{}", num_of_sent, e);
+      eprintln!(
+        "ERROR: number of sentences: \"{}\", in not a valid number\n{}",
+        num_of_sent, e
+      );
       std::process::exit(1);
     }
   };
 
   let template = match matches.value_of("template") {
-    Some(temp) => {
-      match select_entry_from(&templates, temp) {
-        Ok(t) => t,
-        Err(e) => {
-          eprintln!("ERROR: template \"{}\" is not specified in [templates] table in file \"{}\"\n{}", temp, file_name, e);
-          std::process::exit(1);
-        }
+    Some(temp) => match select_entry_from(&templates, temp, &mut random_gen) {
+      Ok(t) => t,
+      Err(e) => {
+        eprintln!(
+          "ERROR: template \"{}\" is not specified in [templates] table in file \"{}\"\n{}",
+          temp, file_name, e
+        );
+        std::process::exit(1);
       }
     },
     None => {
-      let rand_template = match select_entry_from(&data, "templates") {
+      let rand_template = match select_entry_from(&file, "templates", &mut random_gen) {
         Ok(t) => t,
         Err(e) => {
-          eprintln!("ERROR: Could not get a random template from [templates] in file {}\n{}", file_name, e);
+          eprintln!(
+            "ERROR: Could not get a random template from [templates] in file {}\n{}",
+            file_name, e
+          );
           std::process::exit(1);
         }
       };
-      eprintln!("WARNING: No template was provided... using \"{}\" template from dataset", rand_template);
+      eprintln!(
+        "WARNING: No template was provided... using \"{}\" template from dataset",
+        rand_template
+      );
       rand_template
     }
   };
 
-
-  println!("{} from {} with template: {}", num_of_sent, file_name, template);
+  //println!("{} from {} with template: {}", num_of_sent, file_name, template);
 
   for _i in 0..num_of_sent {
-    match gen_with(&data, &template) {
+    match gen_with(&data, &template, &mut random_gen) {
       Ok(gen) => println!("{}", gen),
       Err(e) => {
-        eprintln!("ERROR: Could not generate template {} from data\n{}", template, e);
+        eprintln!(
+          "ERROR: Could not generate template {} from data\n{}",
+          template, e
+        );
         std::process::exit(1);
       }
     }
@@ -154,29 +176,36 @@ fn main() -> std::io::Result<()> {
 
 // Crawls to the entry table/array and pics a random entry
 // IF the entry is not a final array or int..., it randomly crawls to that point
-fn select_entry_from(data: &Value, entry: &str) -> Result<String, String> {
-  let mut random_gen = rand::thread_rng();
-
+fn select_entry_from<'a>(
+  data: &'a Value,
+  entry: &str,
+  rng: &mut ThreadRng,
+) -> Result<String, String> {
   // value, from which we will generate a random entry
   let mut starting_data: &Value = data;
 
-  // razrezi in postopno pridobivaj entrije
+  // razrezi in postopno pridobivaj entries
   let slices: Vec<&str> = entry.trim().split(".").collect();
   //println!("Slices: {:?}\n", slices);
-  for ety in &slices {
+  for ety in slices {
     starting_data = match starting_data.get(ety) {
       Some(d) => d,
-      None => return Err(format!("ERROR: \"{}\" is not a proper field in {}", ety, entry))
+      None => {
+        return Err(format!(
+          "ERROR: \"{}\" is not a proper field in {}",
+          ety, entry
+        ))
+      }
     };
   }
 
   //println!("Starting_data: {:?}\n", starting_data);
 
   // select a random entry from the starting point data
-  select_entry_from_rec(starting_data, &mut random_gen)
+  select_entry_from_rec(starting_data, rng)
 }
 
-fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> Result<String, String> {
+fn select_entry_from_rec<'a>(data: &'a Value, rng: &mut ThreadRng) -> Result<String, String> {
   if data.is_integer() {
     match data.as_integer() {
       Some(i) => Ok(i.to_string()),
@@ -195,7 +224,7 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> Result<String, St
   } else if data.is_datetime() {
     match data.as_datetime() {
       Some(dt) => Ok(dt.to_string()),
-      None => Err("DateTime MISSING".to_string())
+      None => Err("DateTime MISSING".to_string()),
     }
   } else if data.is_str() {
     match data.as_str() {
@@ -219,9 +248,9 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> Result<String, St
         // tables are indexed by string, so we get the key of generated index
 
         //I guess this cannot fail, as we already bug proof and return "" before this statement
-        let new_entry =  match data.get(random_entry_index) {
+        let new_entry = match data.get(random_entry_index) {
           Some(dat) => dat,
-          None => return Err(format!("Cannot get {} from dataset", random_entry_index))
+          None => return Err(format!("Cannot get {} from dataset", random_entry_index)),
         };
 
         select_entry_from_rec(new_entry, rng)
@@ -253,7 +282,7 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> Result<String, St
         //I guess this cannot fail, as we already bug proof and return "" before this statement
         let new_entry = match data.get(random_entry_str) {
           Some(dt) => dt,
-          None => return Err(format!("Cannot get {} from dataset", random_entry_index))
+          None => return Err(format!("Cannot get {} from dataset", random_entry_index)),
         };
 
         // pick a random entry from tabel and return the value representation of it
@@ -264,6 +293,27 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> Result<String, St
   }
 }
 
-fn gen_with(data: &Value, template: &str) -> Result<String, String> {
-  Ok("hello".to_string())
+// fn select_random<'a>(data: &'a Value, rng: &mut ThreadRng) -> &'a Value {
+
+// }
+
+fn gen_with<'a>(data: &'a Value, template: &str, rng: &mut ThreadRng) -> Result<String, String> {
+  let mut slices: Vec<String> = template.split(|c| c == '<' || c == '>').map(|s| s.to_string()).collect();
+
+  for slice in slices.iter_mut() {
+    // we pass the slice without the first char, which is '?' or '!'
+    if slice.starts_with('!') {
+      let rand_entry = select_entry_from(data, &slice[1..], rng)?;
+      *slice = rand_entry;
+    } else if slice.starts_with('?') {
+      if rng.gen_range(0..=1) == 1 {
+        let rand_entry = select_entry_from(data, &slice[1..], rng)?;
+        *slice = rand_entry;
+      } else {
+        *slice = "".to_string();
+      }
+    }
+  }
+
+  Ok(slices.concat().replace("  ", " "))
 }
