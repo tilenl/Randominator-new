@@ -41,23 +41,12 @@ fn main() -> std::io::Result<()> {
       std::process::exit(1);
     }
   };
-
-  println!("RNG entry: {}", select_entry_from(&data, "data.action.action"));
+  println!(
+    "RNG entry: {}",
+    select_entry_from(&data, "data")
+  );
 
   Ok(())
-}
-
-//TODO vrni Result, in v select_entry_form povej, da v data.human.bla bla ni field, da se bo vedlo kje ni ta field, ker morda je v celotnem datasetu... tukaj imamo premalo informacij, da bi to vse napisali
-// Sprejme &str ali int in vrne kar je na temu indexu
-fn get_index<'a>(data: &'a Value, index: &'a str) -> &'a Value {
-  match data.get(index) {
-    Some(dat) => dat,
-    None => {
-      // ne morem sprintat indexa, ker nima Debug traita implementiranega
-      println!("ERROR: \"{}\" is not a proper field in dataset! Exiting ...\n", index);
-      std::process::exit(1);
-    }
-  }
 }
 
 // Crawls to the entry table/array and pics a random entry
@@ -68,18 +57,17 @@ fn select_entry_from(data: &Value, entry: &str) -> String {
   // value, from which we will generate a random entry
   let mut starting_data: &Value = data;
 
-  // entry is a nested subtable ... needs parsing
-  if entry.contains(".") {
-    // razrezi in postopno pridobivaj entrije
-    let slices: Vec<&str> = entry.trim().split(".").collect();
-    println!("Slices: {:?}\n", slices);
-    for ety in slices {
-      starting_data = get_index(starting_data, ety);
-    }
-  } else {
-    // drugace pa ne delamo slicov... in samo dobimo entry
-    // lahko bi brez contains, ampak je tole bolj optimalno
-    starting_data = get_index(starting_data, entry);
+  // razrezi in postopno pridobivaj entrije
+  let slices: Vec<&str> = entry.trim().split(".").collect();
+  println!("Slices: {:?}\n", slices);
+  for ety in slices {
+    starting_data = match starting_data.get(ety) {
+      Some(d) => d,
+      None => {
+        println!("ERROR: \"{}\" is not a proper field in {}", ety, entry);
+        std::process::exit(1);
+      }
+    };
   }
 
   //println!("Starting_data: {:?}\n", starting_data);
@@ -121,16 +109,21 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> String {
 
         if a.len() == 0 {
           // if there is nothing to select, return nothing
-          return "".to_string()
+          return "".to_string();
         }
 
+        // select a random entry index from range [0, 1, 2, ..., a.len() - 1]
         let random_entry_index = rng.gen_range(0..a.len());
 
-        println!("Gen [{} -> {}] = {}\n",0, a.len()-1, random_entry_index);
-        //? NOT using get_index, as we know this cannot fail
-        let new_entry = data.get(random_entry_index).expect(format!("Cannot get {} from dataset", random_entry_index).as_str());
+        println!("Gen [{} -> {}] = {}\n", 0, a.len() - 1, random_entry_index);
+        // tables are indexed by string, so we get the key of generated index
 
-        select_entry_from_rec(&new_entry, rng)
+        //I guess this cannot fail, as we already bug proof and return "" before this statement
+        let new_entry = data
+          .get(random_entry_index)
+          .expect(format!("Cannot get {} from dataset", random_entry_index).as_str());
+
+        select_entry_from_rec(new_entry, rng)
       }
       None => "Array MISSING".to_string(),
     }
@@ -138,8 +131,31 @@ fn select_entry_from_rec(data: &Value, rng: &mut ThreadRng) -> String {
     // else the entry is a table
     match data.as_table() {
       Some(t) => {
+        // pick a random subvalue and return the string representation of it
+        let keys = t.keys();
+        println!("Num of keys: {}", keys.len());
+        // if there are no subvalues, return nothing
+        if keys.len() < 1 {
+          return "".to_string();
+        }
+
+        // select a random entry index from range [0, 1, 2, ..., keys.len() - 1]
+        let random_entry_index = rng.gen_range(0..keys.len());
+        let mut random_entry_str = &String::from(" ");
+        for (i, e) in keys.enumerate() {
+          if i == random_entry_index {
+            random_entry_str = e;
+            break;
+          }
+        }
+        println!("Chose {}\n", random_entry_str);
+        //I guess this cannot fail, as we already bug proof and return "" before this statement
+        let new_entry = data
+          .get(random_entry_str)
+          .expect(format!("Cannot get {} from dataset", random_entry_index).as_str());
+
         // pick a random entry from tabel and return the value representation of it
-        " ".to_string()
+        select_entry_from_rec(new_entry, rng)
       }
       None => "Integer MISSING".to_string(),
     }

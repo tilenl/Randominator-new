@@ -4,22 +4,11 @@
 [templates]
 game_idea_1 = "<!genre> where you <!action> <?adition> <!object>"
 
+
+# Game data
 [data]
-  [data.genre]
-  action = ["A shooting game", "An action game", "An FPS", "A horror game"]
-  arcade = ["An arcade game", "A short game"]
-  nothing = []
-
-  [data.object]
-  human = ["Europeans", "Africans", "Americans"]
-  animal = ["wolfs", "fleas", "cats", "dogs"]
-  creature = ["giants", "chewbackas"]
-
-
   addition = ["short", "amusing", "funny"]
-
-  # This is retarded, but maybe it will break the code, so I'm leaving it in
-  [data.action]
+  
   action = [
     "kill",
     "shoot",
@@ -75,3 +64,13 @@ game_idea_1 = "<!genre> where you <!action> <?adition> <!object>"
     "freeze",
     "burn",
   ]
+
+  [data.genre]
+  action = ["A shooting game", "An action game", "An FPS", "A horror game"]
+  arcade = ["An arcade game", "A short game"]
+  nothing = []
+
+  [data.object]
+  human = ["Europeans", "Africans", "Americans"]
+  animal = ["wolfs", "fleas", "cats", "dogs"]
+  creature = ["giants", "chewbackas"]
