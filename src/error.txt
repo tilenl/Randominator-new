@@ -1,0 +1,20 @@
+warning: dependency (clap) specified without providing a local path, Git repository, or version to use. This will be considered an error in future versions
+warning: unused manifest key: dependencies.clap.clap
+warning: unused variable: `data`
+   --> src\main.rs:267:13
+    |
+267 | fn gen_with(data: &Value, template: &str) -> Result<String, String> {
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `template`
+   --> src\main.rs:267:27
+    |
+267 | fn gen_with(data: &Value, template: &str) -> Result<String, String> {
+    |                           ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_template`
+
+warning: 2 warnings emitted
+
+    Finished dev [unoptimized + debuginfo] target(s) in 0.04s
+     Running `C:\Users\tilen\Documents\Programming\Rust\randominator\target\debug\randominator.exe --template game_idea_1 game_data.toml -n 20`
