@@ -93,7 +93,7 @@ fn main() -> std::io::Result<()> {
       std::process::exit(1);
     }
   };
-  
+
   // DATA AND TEMPLATES LOADED SUCCESSFULLY
 
   // we unwrap it, because default value that will be passed is 1 ... we will ALWAYS get a value (maybe not valid number)
@@ -101,14 +101,14 @@ fn main() -> std::io::Result<()> {
   let num_of_sent: usize = match num_of_sent.parse::<usize>() {
     Ok(num) => {
       if num < 1 {
-        println!("WARNING: number of generated sentences {} is lower than 1... generating 1 sentence", num);
+        eprintln!("WARNING: number of generated sentences {} is lower than 1... generating 1 sentence", num);
         1
       } else {
         num
       }
     },
     Err(e) => {
-      println!("ERROR: number of sentences: \"{}\", in not a valid number\n{}", num_of_sent, e);
+      eprintln!("ERROR: number of sentences: \"{}\", in not a valid number\n{}", num_of_sent, e);
       std::process::exit(1);
     }
   };
@@ -118,7 +118,7 @@ fn main() -> std::io::Result<()> {
       match select_entry_from(&templates, temp) {
         Ok(t) => t,
         Err(e) => {
-          println!("ERROR: template \"{}\" is not specified in [templates] table in file \"{}\"\n{}", temp, file_name, e);
+          eprintln!("ERROR: template \"{}\" is not specified in [templates] table in file \"{}\"\n{}", temp, file_name, e);
           std::process::exit(1);
         }
       }
@@ -127,11 +127,11 @@ fn main() -> std::io::Result<()> {
       let rand_template = match select_entry_from(&data, "templates") {
         Ok(t) => t,
         Err(e) => {
-          println!("ERROR: Could not get a random template from [templates] in file {}\n{}", file_name, e);
+          eprintln!("ERROR: Could not get a random template from [templates] in file {}\n{}", file_name, e);
           std::process::exit(1);
         }
       };
-      println!("No template was provided... using \"{}\" template from dataset", rand_template);
+      eprintln!("WARNING: No template was provided... using \"{}\" template from dataset", rand_template);
       rand_template
     }
   };
@@ -143,7 +143,7 @@ fn main() -> std::io::Result<()> {
     match gen_with(&data, &template) {
       Ok(gen) => println!("{}", gen),
       Err(e) => {
-        println!("ERROR: Could not generate template {} from data\n{}", template, e);
+        eprintln!("ERROR: Could not generate template {} from data\n{}", template, e);
         std::process::exit(1);
       }
     }
