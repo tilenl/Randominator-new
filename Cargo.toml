@@ -15,11 +15,3 @@ rand = "0.8.3"
 version = "2.33.3"
 default-features = false
 features = ["suggestions"]
-
-[[bin]]
-name = "randor"
-path = "src/main.rs"
-test = false
-doc = false
-becnh = false
-edition = "2018"
