@@ -13,6 +13,13 @@ Flags parsing was redone and is now much more user friendly.
  - double spacebars are not tolerated in output strings (they are replaced with one spacebar)
  - templates and data now reside in one file (because of templates and data missmatching previously)
 
+## Installation
+    cargo install --git https://github.com/tilenl/Randominator-new.git --branch main
+
+If this does not work, you can still download the code from github, unzip it change directory to the folder (example: cd randominator-new), and execute this command inside it:
+
+    cargo install --path .
+
 ## Example
 
 ### Dataset (*.toml file)
