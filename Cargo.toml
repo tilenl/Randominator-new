@@ -1,16 +1,25 @@
 [package]
 name = "randominator"
-version = "0.1.0"
+version = "3.0.0"
 authors = ["tilenl <tilenlampret1@gmail.com>"]
 edition = "2018"
-
+description = "Generate random sentences based on given data and templates"
+readme = "readme.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 toml = "0.5.8"
 rand = "0.8.3"
 
-  [dependencies.clap]
-  clap = "2.33.3"
-  default-features = false
-  features = ["suggestions"]
+[dependencies.clap]
+version = "2.33.3"
+default-features = false
+features = ["suggestions"]
+
+[[bin]]
+name = "randor"
+path = "src/main.rs"
+test = false
+doc = false
+becnh = false
+edition = "2018"
