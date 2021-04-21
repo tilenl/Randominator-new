@@ -2,12 +2,12 @@
 
 # Templates
 [templates]
-game_idea_1 = "<!genre.action> where you <!action> <?addition> <!object>"
+idea_1 = "<!genre> where you <!action> <?addition> <!object>"
 
 
 # Game data
 [data]
-  addition = ["short", "amusing", "funny"]
+  addition = ["short", "amusing", "funny", "giant"]
   
   action = [
     "kill",
@@ -63,13 +63,16 @@ game_idea_1 = "<!genre.action> where you <!action> <?addition> <!object>"
     "commit war crimes with",
     "freeze",
     "burn",
+    "swim with"
   ]
 
   [data.genre]
-  action = ["A shooting game", "An action game", "An FPS", "A horror game"]
+  action = ["A shooting game", "An action game", "An FPS game", "A horror game"]
   arcade = ["An arcade game", "A short game"]
+  adventure = ["An exploration game", "A space exploration game", "An adventurous game"]
 
   [data.object]
-  human = ["Europeans", "Africans", "Americans"]
-  animal = ["wolfs", "fleas", "cats", "dogs"]
-  creature = ["giants", "chewbakas"]
+  human = ["Europeans", "Africans", "Americans", "Chinese", "Swedes"]
+  history = ["Huns", "Romans", "Greeks", "Vikings"]
+  animal = ["wolfs", "fleas", "cats", "dogs", "spiders"]
+  creature = ["giants", "chewbakas", "aliens", "dragons"]

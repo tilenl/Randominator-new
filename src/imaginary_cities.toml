@@ -1,0 +1,19 @@
+
+[templates]
+big = "<!starting.big><!middle><!ending.big>"
+real = " <?real.pre> <!real.starting><!real.middle><!real.end>"
+
+[data]
+  middle = ["bis", "kaz", "rista", "romuri", "ram"]
+
+  [data.starting]
+    big = ["Gra", "Hub", "Mogu", "Rasti", "Xa"]
+
+  [data.ending]
+    big = ["kas", "kam", "is", "mazu", "ry", "ham", "cyt"]
+  
+  [data.real]
+  pre = ["New"]
+  starting = ["To", "Lon", "Par", "Kop", "Yor", "Lju", "Rus", "Rom", "Hab"]
+  middle = ["on", "pe", "ri", "ki"]
+  end = ["er", "on", "is", "na", "io"]

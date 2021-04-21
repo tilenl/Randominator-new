@@ -1,0 +1,15 @@
+[templates]
+example = "<!greetings>, <!question>"
+example_eng = "<!greetings.eng>, <!question.eng>"
+
+[data]
+  [data.greetings]
+  eng = ["Hello", "Hi"]
+  frn = ["Bonjour", "Salut"]
+  slo = ["Pozdrav", "Zivijo"]
+  ita = ["Buongiorno", "Ciao"]
+
+  [data.question]
+  eng = ["how are you?", "how is it going?"]
+  slo = ["kako si?"]
+  ita = ["come va?"]
