@@ -16,7 +16,7 @@ Flags parsing was redone and is now much more user friendly.
 ## Installation
     cargo install --git https://github.com/tilenl/Randominator-new.git --branch main
 
-If this does not work, you can still download the code from github, unzip it change directory to the folder (example: cd randominator-new), and execute this command inside it:
+If this does not work, you can still download the code from github, unzip it, change directory to the folder (example: cd randominator-new), and execute this command inside it:
 
     cargo install --path .
 
@@ -39,7 +39,7 @@ If this does not work, you can still download the code from github, unzip it cha
         eng = ["how are you?", "how is it going?"]
         slo = ["kako si?"]
         ita = ["come va?"]
-    --End of Example.toml--
+    -- End of Example.toml --
  - if a non final table (it has more subtables) is specified, randominator will randomly choose one path and continue along it, until it reaches parsable data (strings, arrays, ints, floats...), which he will use
  - if table contains subtables and data, data should always be in front of subtables. Otherwise that data will be grouped as a child of that subtable and not he original intended table:
  - you always need to specify: generate always (use '!') or generate sometimes (use '?')
@@ -69,4 +69,4 @@ Hi, how are you?
 Hello, how are you?
 
 
-To learn more out toml, [click this link](https://learnxinyminutes.com/docs/toml/)
+To learn more about toml, [click this link](https://learnxinyminutes.com/docs/toml/)
