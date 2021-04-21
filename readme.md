@@ -2,7 +2,7 @@
 ### Rust edition
 
 ## Version 3 news
-This is a rewrite of the orginial Nim language codebase of Randominator V2.
+This is a rewrite of the orginial Nim language codebase of [Randominator V2](https://github.com/tilenl/Randominator).
 By going with Rust, I was able to eliminate all bugs and retain the functionality of the original.
 Flags parsing was redone and is now much more user friendly.
 
