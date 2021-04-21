@@ -62,4 +62,4 @@ Hi, how are you?
 Hello, how are you?
 
 
-To learn more about toml, [click this link](https://learnxinyminutes.com/docs/toml/)
+To learn more out toml, [click this link](https://learnxinyminutes.com/docs/toml/)
