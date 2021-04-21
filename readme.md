@@ -59,14 +59,16 @@ This will not work as intended (foo_data will be gruped with bar)
         foo_data = "Foo"            
 
 Some outputs when run as "randominator example.toml -n 3 -t example":
-Hello, come va?
-Hello, how is it going?
-Buongiorno, kako si?
+
+ - Hello, come va?
+ - Hello, how is it going?
+ - Buongiorno, kako si?
 
 Some outputs when run as "randominator example.toml -n 3 -t example_eng":
-Hello, how is it going?
-Hi, how are you?
-Hello, how are you?
+
+ - Hello, how is it going?
+ - Hi, how are you?
+ - Hello, how are you?
 
 
 To learn more about toml, [click this link](https://learnxinyminutes.com/docs/toml/)
